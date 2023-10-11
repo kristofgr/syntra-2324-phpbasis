@@ -19,7 +19,7 @@ if (array_key_exists('offset', $_GET)) {
 <html>
   <head>
     <title>
-      Cats from Unsplash...
+      Lego from Unsplash...
     </title>
     <link rel="stylesheet" href="https://unpkg.com/mvp.css"> 
   </head> 
@@ -28,7 +28,7 @@ if (array_key_exists('offset', $_GET)) {
       
       <section>
           <header>
-            <h1>Cats</h1>
+            <h1>Lego</h1>
             <p>Totaal: <?php echo $aantalFotos; ?> foto's</p>
           </header>
 

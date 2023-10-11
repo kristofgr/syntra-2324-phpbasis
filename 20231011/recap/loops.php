@@ -7,8 +7,8 @@
 
   $output = "";
 
-  for ($i=1; $i < count($alphabet); $i++) {
-    if ($i%2==0) {
+  for ($i=0; $i < count($alphabet); $i++) {
+    if ($i%2==0) { // Indien $i een even getal is
       if (strlen($output) > 0) {
         $output = $output . '-' . $alphabet[$i];
       }
