@@ -1,0 +1,10 @@
+{
+  "functions": {
+    "2023*/*.php": {
+      "runtime": "vercel-php@0.6.0"
+    },
+    "2023*/*/*.php": {
+      "runtime": "vercel-php@0.6.0"
+    }
+  }
+}
