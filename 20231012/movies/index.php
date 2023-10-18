@@ -48,13 +48,13 @@ if (array_key_exists('genre', $_GET)) {
                   <th><a href="detail.php?id=<?= $movie['uuid']; ?>">
                       <?= $movie['title']; ?>
                     </a></th>
-                  <th><a href="index.php?genre=<?= $movie['genre']; ?>">
+                  <th><a href="index.php?genre=<?= $movie['genre'] . ($filter_year ? "&year=$filter_year" : ""); ?>">
                       <?= $movie['genre']; ?>
                     </a></th>
                   <th>
                     <?= substr($movie['description'], 0, 50) . (strlen($movie['description']) > 50 ? '...' : ''); ?>
                   </th>
-                  <th><a href="index.php?year=<?= $movie['year']; ?>">
+                  <th><a href="index.php?year=<?= $movie['year'] . ($filter_genre ? "&genre=$filter_genre" : ""); ?>">
                       <?= $movie['year']; ?>
                     </a></th>
                 </tr>
