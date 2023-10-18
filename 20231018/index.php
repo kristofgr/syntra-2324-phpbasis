@@ -49,12 +49,7 @@ echo "<br>";
 echo "<h2>Palindrome...</h2>";
 function isPalindrome(String $word) {
   $word = strtolower($word);
-  
-  if ($word == strrev($word)) {
-    return TRUE;
-  }
-
-  return FALSE;
+  return ($word == strrev($word));
 }
 
 $woorden = array("lepel", "vork", "rotator", "raceCar", "syntra");
