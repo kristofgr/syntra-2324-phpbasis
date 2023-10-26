@@ -3,41 +3,65 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-echo "<pre>";
-print_r($_POST);
-echo "</pre>";
+// echo "<pre>";
+// print_r($_POST);
+// echo "</pre>";
 
-if (isset($_POST["name"]) && isset($_POST["category"])) {
-  $db_host = '127.0.0.1';
-  $db_user = 'root';
-  $db_password = 'root';
-  $db_db = 'php_mysql';
-  $db_port = 8889;
+require("db.inc.php");
 
-  try {
-    $pdo = new PDO('mysql:host=' . $db_host . '; port=' . $db_port . '; dbname=' . $db_db, $db_user, $db_password);
-  } catch (PDOException $e) {
-    echo "Error!: " . $e->getMessage() . "<br/>";
-    die();
+$errors = [];
+$valid_categories = array("Vogels", "Zoogdieren", "Insecten", "Bomen en Planten");
+
+if (isset($_POST["name"])) {
+
+  if (strlen(trim($_POST["name"])) == 0) {
+    $errors[] = "Naam is een verplicht veld.";
   }
 
-  $sql = "INSERT INTO soorten(name, category) VALUES(:name, :category)";
-  $stmt = $pdo->prepare($sql);
-  $stmt->execute([
-    'name' => $_POST['name'],
-    'category'=> $_POST['category'],
-  ]);
+  if (!isset($_POST["category"])) {
+    $errors[] = "Gelieve een categorie te selecteren.";
+  } else {
+    if (!in_array(trim($_POST["category"]), $valid_categories)) {
+      $errors[] = "Categorie moet één van volgende waardes zijn: Vogels, Zoogdieren.";
+    }
+  }
+
+  if (count($errors) == 0) {
+    insertSoort($_POST['name'], $_POST['category']);
+    header("Location: index.php?message=" . $_POST['name']);
+    exit();
+  }
 }
+
+if (isset($_GET['id']) && (int) $_GET['id'] > 0) {
+  $id = $_GET['id']; 
+  $soort = getSoort($id);
+
+  if (count($soort) > 0) {
+    $soort = $soort[0];
+  }
+
+  // echo '<pre>';
+  // print_r($soort);
+  // exit;
+}
+
 ?>
 
 <!DOCTYPE html>
-<html>
+<html color-mode="user">
 
 <head>
   <title>
     Soort toevoegen
   </title>
   <link rel="stylesheet" href="https://unpkg.com/mvp.css">
+
+  <style>
+    ul.errors li {
+      color: red;
+    }
+  </style>
 </head>
 
 <body>
@@ -46,15 +70,35 @@ if (isset($_POST["name"]) && isset($_POST["category"])) {
       <form action="form.php" method="POST">
         <header>
           <h2>Soort toevoegen</h2>
+
+          <ul class="errors">
+            <?php foreach ($errors as $error): ?>
+              <li>
+                <?= $error; ?>
+              </li>
+            <?php endforeach; ?>
+          </ul>
+
         </header>
 
         <label for="name">Naam</label>
-        <input type="text" id="name" name="name" size="20" placeholder="Naam">
+        <input type="text" id="name" name="name" size="20" placeholder="Naam" value="  (isset($soort["name"]) ? $soort["name"] : "")); ?>">
 
         <label for="category">Categorie</label>
-        <input type="text" id="category" name="category" size="20" placeholder="Categorie">
+        
+          <?php foreach ($valid_categories as $valid_category): ?>
+            
+            <input type="radio" id="<?= $valid_category; ?>" name="category" value="<?= $valid_category; ?>"<?= (($valid_category == @$_POST['category']) ? ' checked="checked"' : "") ?>>
+            <label for="<?= $valid_category; ?>"><?= $valid_category; ?></label><br>
+
+
+          <?php endforeach; ?>
+
+       
 
         <button type="submit">Opslaan</button>
+        <a href="index.php"><i>Annuleer</i></a>
+
       </form>
     </section>
   </main>

@@ -4,7 +4,6 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once('db.inc.php');
-
 $items_per_page = 20;
 
 // We halen alle beschikbare categoriën uit de DB, dit is voor latere quality control
