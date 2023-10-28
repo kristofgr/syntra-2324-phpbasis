@@ -82,18 +82,22 @@ if (isset($_GET['id']) && (int) $_GET['id'] > 0) {
         </header>
 
         <label for="name">Naam</label>
-        <input type="text" id="name" name="name" size="20" placeholder="Naam" value="  (isset($soort["name"]) ? $soort["name"] : "")); ?>">
+        <input type="text" id="name" name="name" size="20" placeholder="Naam" value="<?= (isset($_POST['name']) ? $_POST['name'] : ""); ?>">
 
         <label for="category">Categorie</label>
         
-          <?php foreach ($valid_categories as $valid_category): ?>
-            
+          <?php /*foreach ($valid_categories as $valid_category): ?>
             <input type="radio" id="<?= $valid_category; ?>" name="category" value="<?= $valid_category; ?>"<?= (($valid_category == @$_POST['category']) ? ' checked="checked"' : "") ?>>
             <label for="<?= $valid_category; ?>"><?= $valid_category; ?></label><br>
+          <?php endforeach; */?>
 
-
-          <?php endforeach; ?>
-
+          <select id="category" name="category">
+            <?php foreach ($valid_categories as $valid_category): ?>
+              <option value="<?= $valid_category; ?>"<?= (($valid_category == @$_POST['category']) ? ' checked="checked"' : "") ?>>
+                <?= $valid_category; ?>
+              </option>
+            <?php endforeach; ?>
+          </select>
        
 
         <button type="submit">Opslaan</button>
