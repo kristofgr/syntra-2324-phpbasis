@@ -34,8 +34,22 @@ function getProfiles(): array
   return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function insertProfile($tokens): void {
-  $sql = "INSERT INTO profiles (name, maturity, avatar_id, status) VALUES (:name, :maturity, '45', 1)";
+function insertProfile(array $tokens): void
+{
+  $sql = "INSERT INTO profiles (name, maturity, avatar_id, status) VALUES (:name, :maturity, :avatar, 1)";
   $stmt = connectToDB()->prepare($sql);
   $stmt->execute($tokens);
+}
+
+function getAvatars(): array
+{
+  $sql = "SELECT category, id, name, image
+      FROM avatars
+      WHERE status = 1      
+      ORDER BY category ASC";
+
+  $stmt = connectToDB()->prepare($sql);
+  $stmt->execute();
+
+  return $stmt->fetchAll(PDO::FETCH_GROUP);
 }

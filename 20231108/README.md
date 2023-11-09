@@ -18,8 +18,11 @@ h1. Todo
 
 
 
+AVATARS SELECTEREN
+------------------
 
-
-
-
-
+x in het formulier met html extra field met 3 radio buttons aanmaken
+- met 3 hard gecodeerde avatars gaan we de php > db insert aanpassen
+- de 3 hard gevodeerde avatars met foto tonen.
+- 3 hard gecodeerde avatars aanpassen door de echte avatars uit de db (zonder categoriën)
+- opdelen per categorie
