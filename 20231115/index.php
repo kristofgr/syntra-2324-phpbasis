@@ -39,7 +39,8 @@ $question = getQuestionById($temp);
 
         <?php foreach ($question["answers"] as $answer): ?>
           <div class="form-check mb-2">
-            <input class="form-check-input" type="radio" name="answer" value="<?= $answer["id"]; ?>" id="answer<?= $answer["id"]; ?>" />
+            <input class="form-check-input" type="radio" name="answer" value="<?= $answer["id"]; ?>"
+              id="answer<?= $answer["id"]; ?>" />
             <label class="form-check-label" for="answer<?= $answer["id"]; ?>">
               <?= $answer["answer"]; ?>
             </label>

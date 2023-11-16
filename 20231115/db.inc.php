@@ -19,7 +19,7 @@ function connectToDB()
   return $db;
 }
 
-function getQuestionById(int $id): array
+function getQuestionById(int $id): array | bool
 {
   $sql = "SELECT id, question
       FROM questions 
@@ -31,6 +31,10 @@ function getQuestionById(int $id): array
   ]);
 
   $question = $stmt->fetch(PDO::FETCH_ASSOC);
+
+  if (!$question) {
+    return false;
+  }
 
   $sql = "SELECT * FROM answers WHERE question_id = :id";
   $stmt = connectToDB()->prepare($sql);
