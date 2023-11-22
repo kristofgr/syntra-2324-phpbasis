@@ -1,4 +1,5 @@
 <?php
+
 $url = "https://hp-api.onrender.com/api/characters";
 
 $curl_handle = curl_init();
@@ -11,7 +12,7 @@ $curl_data = curl_exec($curl_handle);
 curl_close($curl_handle);
 $response = json_decode($curl_data);
 
-function getFancyDate(String $datum) : string
+function getFancyDate(string $datum): string
 {
   $datum = strtotime($datum);
   return date("l, d m Y", $datum);
@@ -137,11 +138,13 @@ function getFancyDate(String $datum) : string
 
             <div class="col">
               <div class="card shadow-sm">
-                
-              <img src="<?= $character->image; ?>" alt="<?= $character->name; ?>" title="<?= $character->name; ?>"/>
-                
+
+                <img src="<?= $character->image; ?>" alt="<?= $character->name; ?>" title="<?= $character->name; ?>" />
+
                 <div class="card-body">
-                  <p class="card-text"><?= ($character->dateOfBirth !== null ? getFancyDate($character->dateOfBirth) : ''); ?></p>
+                  <p class="card-text">
+                    <?= ($character->dateOfBirth !== null ? getFancyDate($character->dateOfBirth) : ''); ?>
+                  </p>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
