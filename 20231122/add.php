@@ -1,9 +1,9 @@
 <?php
 require_once('env.php');
 
-print '<pre>';
-print_r($_POST);
-print '</pre>';
+// print '<pre>';
+// print_r($_POST);
+// print '</pre>';
 
 $errors = [];
 
@@ -11,18 +11,42 @@ $errors = [];
 if (isset($_POST['url'])) {
 
   // Check if URL has a valid format
-  if (!preg_match("/^((https|http|ftp)\:\/\/)?([a-z0-9A-Z]+\.[a-z0-9A-Z]+\.[a-z0-9A-Z]+\.[a-zA-Z]{2,4}|[a-z0-9A-Z]+\.[a-z0-9A-Z]+\.[a-zA-Z]{2,4}|[a-z0-9A-Z]+\.[a-zA-Z]{2,4})$/i", $_POST['url'])) {
-    $errors['url'] = "url moet wel een echte url zijn.";
-  }
+  // if (!preg_match("/^((https|http)\:\/\/)?( ]+\.[a-z0-9A-Z]+\.[a-z0-9A-Z]+\.[a-zA-Z]{2,4}|[a-z0-9A-Z]+\.[a-z0-9A-Z]+\.[a-zA-Z]{2,4}|[a-z0-9A-Z]+\.[a-zA-Z]{2,4})$/i", $_POST['url'])) {
+  //   $errors['url'] = "url moet wel een echte url zijn.";
+  // }
 
   // Check if URL is not empty
   if (empty(trim($_POST['url']))) {
     $errors['url'] = "url mag niet leeg zijn.";
   }
 
-  $errors['name'] = "Naam mag niet leeg zijn.";
-}
+  // Geen errors met POST -> spreek de API aan:
+  if (empty($errors)) {
+    require('includes/api.inc.php');
 
+    $screenshot = getScreenshotFromUrl($_POST['url']);
+    $results = getOGFromUrl($_POST['url']);
+
+    if (!$results) {
+      $errors['url'] = "De API gaf geen resultaat terug voor deze URL.";
+    } else {
+      require('includes/db.inc.php');
+
+      insertBookmark(
+        (isset($results->hybridGraph->title) ? substr($results->hybridGraph->title, 0, 255) : ""),
+        (isset($results->hybridGraph->site_name) ? substr($results->hybridGraph->site_name, 0, 255) : ""),
+        (isset($results->hybridGraph->description) ? substr($results->hybridGraph->description, 0, 255) : ""),
+        (isset($results->hybridGraph->image) ? substr($results->hybridGraph->image, 0, 255) : ""),
+        (isset($results->hybridGraph->url) ? substr($results->hybridGraph->url, 0, 255) : ""),
+        $screenshot
+      );
+
+      header("Location: index.php");
+      exit;
+    }
+  }
+
+}
 
 ?>
 <!DOCTYPE html>

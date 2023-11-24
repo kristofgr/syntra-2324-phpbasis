@@ -20,3 +20,17 @@ function getBookmarks(): array
 
   return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+function insertBookmark(string $title, string $sitename, string $description, string $image, string $url, string $screenshot): void
+{
+  $sql = "INSERT INTO bookmarks(title, sitename, description, image, url, screenshot) VALUES (:title, :sitename, :description, :image, :url, :screenshot)";
+  $stmt = connectToDB()->prepare($sql);
+  $stmt->execute([
+    'title' => $title,
+    'sitename' => $sitename,
+    'description' => $description,
+    'image' => $image,
+    'url' => $url,
+    'screenshot' => $screenshot,
+  ]);
+}
