@@ -19,7 +19,7 @@ function connectToDB()
   return $db;
 }
 
-function getQuestionById(int $id): array | bool
+function getQuestionById(int $id): array|bool
 {
   $sql = "SELECT id, question
       FROM questions 
@@ -68,10 +68,30 @@ function upVoteAnswerById(int $id): bool
 
   $count = $stmt->rowCount();
 
-  if($count == 0){
+  if ($count == 0) {
     return false;
-  }
-  else{
+  } else {
     return true;
   }
 }
+
+function checkUser(string $username, string $password): object|bool
+{
+  $sql = "SELECT id, username, created_at
+      FROM users 
+      WHERE username=:username AND password=:password";
+
+  $stmt = connectToDB()->prepare($sql);
+  $stmt->execute([
+    "username" => $username,
+    "password" => $password
+  ]);
+
+  $user = $stmt->fetch(PDO::FETCH_OBJ);
+
+  if (!$user)
+    return false;
+
+  return $user;
+}
+

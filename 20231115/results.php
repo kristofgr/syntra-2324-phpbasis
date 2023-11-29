@@ -14,7 +14,7 @@ if ($id == 0) {
   exit();
 }
 
-require('db.inc.php');
+require('includes/db.inc.php');
 
 $question = getQuestionById($id);
 

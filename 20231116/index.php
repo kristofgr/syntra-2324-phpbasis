@@ -18,6 +18,10 @@ function getFancyDate(string $datum): string
   return date("l, d m Y", $datum);
 }
 
+print '<pre>';
+print_r($response);
+exit;
+
 ?>
 
 <!DOCTYPE html>

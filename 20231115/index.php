@@ -3,7 +3,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require('db.inc.php');
+require('includes/db.inc.php');
 
 $temp = 1;
 
