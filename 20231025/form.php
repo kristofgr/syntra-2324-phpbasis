@@ -34,7 +34,7 @@ if (isset($_POST["name"])) {
 }
 
 if (isset($_GET['id']) && (int) $_GET['id'] > 0) {
-  $id = $_GET['id']; 
+  $id = $_GET['id'];
   $soort = getSoort($id);
 
   if (count($soort) > 0) {
@@ -67,38 +67,39 @@ if (isset($_GET['id']) && (int) $_GET['id'] > 0) {
 <body>
   <main>
     <section>
+      <header>
+        <h2>Soort toevoegen</h2>
+
+        <ul class="errors">
+          <?php foreach ($errors as $error): ?>
+            <li>
+              <?= $error; ?>
+            </li>
+          <?php endforeach; ?>
+        </ul>
+
+      </header>
       <form action="form.php" method="POST">
-        <header>
-          <h2>Soort toevoegen</h2>
-
-          <ul class="errors">
-            <?php foreach ($errors as $error): ?>
-              <li>
-                <?= $error; ?>
-              </li>
-            <?php endforeach; ?>
-          </ul>
-
-        </header>
 
         <label for="name">Naam</label>
-        <input type="text" id="name" name="name" size="20" placeholder="Naam" value="<?= (isset($_POST['name']) ? $_POST['name'] : ""); ?>">
+        <input type="text" id="name" name="name" size="20" placeholder="Naam"
+          value="<?= (isset($_POST['name']) ? $_POST['name'] : ""); ?>">
 
         <label for="category">Categorie</label>
-        
-          <?php /*foreach ($valid_categories as $valid_category): ?>
-            <input type="radio" id="<?= $valid_category; ?>" name="category" value="<?= $valid_category; ?>"<?= (($valid_category == @$_POST['category']) ? ' checked="checked"' : "") ?>>
-            <label for="<?= $valid_category; ?>"><?= $valid_category; ?></label><br>
-          <?php endforeach; */?>
 
-          <select id="category" name="category">
-            <?php foreach ($valid_categories as $valid_category): ?>
-              <option value="<?= $valid_category; ?>"<?= (($valid_category == @$_POST['category']) ? ' checked="checked"' : "") ?>>
-                <?= $valid_category; ?>
-              </option>
-            <?php endforeach; ?>
-          </select>
-       
+        <?php /*foreach ($valid_categories as $valid_category): ?>
+<input type="radio" id="<?= $valid_category; ?>" name="category" value="<?= $valid_category; ?>"<?= (($valid_category == @$_POST['category']) ? ' checked="checked"' : "") ?>>
+<label for="<?= $valid_category; ?>"><?= $valid_category; ?></label><br>
+<?php endforeach; */?>
+
+        <!-- <select id="category" name="category">
+          <?php foreach ($valid_categories as $valid_category): ?>
+            <option value="<?= $valid_category; ?>" <?= (($valid_category == @$_POST['category']) ? ' checked="checked"' : "") ?>>
+              <?= $valid_category; ?>
+            </option>
+          <?php endforeach; ?>
+        </select> -->
+
 
         <button type="submit">Opslaan</button>
         <a href="index.php"><i>Annuleer</i></a>
