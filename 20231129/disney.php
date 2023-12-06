@@ -3,7 +3,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-$url = "https://api.disneyapi.dev/character?pageSize=50&name=" . urlencode("Wall");
+$url = "https://api.disneyapi.dev/character?pageSize=50&name=".urlencode("Wall");
 
 $curl_handle = curl_init();
 
@@ -21,7 +21,7 @@ $characters = $curl_data->data;
 //   $characters = [$characters];
 // }
 
-if (!is_array($characters)) {
+if(!is_array($characters)) {
   $characters = [$characters];
 }
 
@@ -31,7 +31,7 @@ if (!is_array($characters)) {
 
 
 
-foreach ($characters as $char) {
-  print $char->name;
+foreach($characters as $char) {
+  print $char->name.' - '.$char->_id;
   print '<br>';
 }
