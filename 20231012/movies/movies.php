@@ -3,7 +3,7 @@ $movies = array(
   array(
     "id" => 1,
     "uuid" => "EFKANH1LJHS3",
-    "title" => "Inception",
+    "title" => "Incéption",
     "director" => "Christopher Nolan",
     "year" => 2010,
     "genre" => "Sci-Fi",

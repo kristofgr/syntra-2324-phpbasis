@@ -1,5 +1,6 @@
 <?php
 require('movies.php');
+require('functions.inc.php');
 
 // Filter by Year
 $filter_year = NULL;
@@ -45,7 +46,7 @@ if (array_key_exists('genre', $_GET)) {
                   <th>
                     <?= $key; ?>
                   </th>
-                  <th><a href="detail.php?id=<?= $movie['uuid']; ?>">
+                  <th><a href="movie/<?= createSlugFromName($movie['title']); ?>">
                       <?= $movie['title']; ?>
                     </a></th>
                   <th><a href="index.php?genre=<?= $movie['genre'] . ($filter_year ? "&year=$filter_year" : ""); ?>">

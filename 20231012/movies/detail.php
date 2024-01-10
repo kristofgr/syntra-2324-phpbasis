@@ -4,23 +4,24 @@ ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
 
 require('movies.php');
+require('functions.inc.php');
 
-$movie_id = 0;
-if (array_key_exists('id', $_GET)) {
-  $movie_id = $_GET['id'];
+$slug = ' ';
+if (array_key_exists('slug', $_GET)) {
+  $slug = $_GET['slug'];
 }
 
 $movie = NULL;
 foreach ($movies as $item) {
-  if ($movie_id == $item['uuid']) {
+  if ($slug == createSlugFromName($item['title'])) {
     $movie = $item;
   }
 }
 
-if ($movie === NULL) {
-  header("Location: 404.php");
-  exit;
-}
+// if ($movie === NULL) {
+//   header("Location: 404.php");
+//   exit;
+// }
 ?>
 <!DOCTYPE html>
 <html>
