@@ -44,7 +44,7 @@ class Person
 
     public function setGender(string $str)
     {
-        if (in_array($str, ['m', 'f'])) {
+        if (in_array($str, ['m', 'f', 'x'])) {
             $this->gender = $str;
         }
     }
@@ -74,8 +74,8 @@ class Person
         return $this->dob;
     }
 
-    public function getAge()
+    public function getAge(): int
     {
-        return time() - $this->dob;
+        return (int)(Date('Y', time() - $this->dob)) - 1970;
     }
 }
