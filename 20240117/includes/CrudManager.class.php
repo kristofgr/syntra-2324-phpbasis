@@ -86,7 +86,7 @@ class CrudManager
             $str .= '<th scope="col">' . $column->Field . '</th>';
         }
 
-        $str .= '</tr></thead>';
+        $str .= '<th scope="col">Actions</th></tr></thead>';
 
         $str .= '<tbody class="table-group-divider">';
 
@@ -100,6 +100,8 @@ class CrudManager
             foreach (get_object_vars($record) as $key => $value) {
                 $str .= '<td>' . $value . '</td>';
             }
+
+            $str .= '<td>view - edit - delete</td>';
 
             $str .= '</tr>';
         }
