@@ -1,8 +1,5 @@
 <?php
-
 require('includes/CrudManager.class.php');
-require('includes/ProductManager.class.php');
-require('includes/CategoryManager.class.php');
 
 $entity = null;
 
@@ -13,8 +10,19 @@ if (isset($_GET['entity'])) {
     die();
 }
 
-$CrudManager = new CrudManager($entity);
 
+$id = null;
+
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+} else {
+    http_response_code(404);
+    die();
+}
+
+
+$CrudManager = new CrudManager($entity);
+$record = $CrudManager->getById($id);
 ?>
 <!DOCTYPE html>
 <html>
@@ -29,10 +37,12 @@ $CrudManager = new CrudManager($entity);
 
     <div class="container">
         <header>
-            <h1><?= ucfirst($entity); ?></h1>
+            <h1><?= ucfirst($entity); ?> - id <?= $id; ?></h1>
         </header>
 
-        <?php print $CrudManager->getAdminTable(); ?>
+        <pre>
+            <?php print_r($record); ?>
+        </pre>
 
     </div>
 
