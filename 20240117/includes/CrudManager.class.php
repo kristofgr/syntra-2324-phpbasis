@@ -2,7 +2,6 @@
 
 class CrudManager
 {
-
     private $table;
     private $db;
 
@@ -39,10 +38,10 @@ class CrudManager
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
-    protected function getDb()
+    protected function getDB()
     {
         return $this->db;
     }
@@ -50,5 +49,63 @@ class CrudManager
     public function getTable()
     {
         return $this->table;
+    }
+
+    protected function getDBDescription(): array
+    {
+        $sql = "DESCRIBE " . $this->getTable();
+        $stmt = $this->getDB()->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function getById(int $id): object|false
+    {
+        $sql = "SELECT * FROM " . $this->getTable() . " WHERE id = :id";
+        $stmt = $this->getDB()->prepare($sql);
+        $stmt->execute([
+            'id' => $id
+        ]);
+
+        return $stmt->fetch(PDO::FETCH_OBJ);
+    }
+
+    public function getAdminTable()
+    {
+        $records = $this->getAll();
+        $columns = $this->getDBDescription();
+
+        // print '<pre>';
+        // print_r($columns);
+        // exit;
+
+        $str = '<table class="table"><thead><tr>';
+
+        foreach ($columns as $column) {
+            $str .= '<th scope="col">' . $column->Field . '</th>';
+        }
+
+        $str .= '</tr></thead>';
+
+        $str .= '<tbody class="table-group-divider">';
+
+        if (sizeof($records) < 1) {
+            $str .= '<tr><td colspan="' . sizeof($columns) . '">There are no records for this entity</td></tr>';
+        }
+
+        foreach ($records as $record) {
+            $str .= '<tr>';
+
+            foreach (get_object_vars($record) as $key => $value) {
+                $str .= '<td>' . $value . '</td>';
+            }
+
+            $str .= '</tr>';
+        }
+
+        $str .= '</tbody></table>';
+
+        return $str;
     }
 }

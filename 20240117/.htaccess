@@ -1,0 +1,7 @@
+#  DirectoryIndex pdo.php 
+Options +FollowSymLinks -MultiViews
+
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^admin/(products|categories|locations)$ admin.php?entity=$1 [L,QSA,NC]
