@@ -15,6 +15,30 @@ if (isset($_GET['entity'])) {
 
 $CrudManager = new CrudManager($entity);
 
+$alerts = [];
+
+// Do we need to delete a record?
+if (isset($_GET['delete']) && (int)($_GET['delete']) > 0) {
+    $record = $CrudManager->getById($_GET['delete']);
+    if ($record) {
+        $CrudManager->deleteById($_GET['delete']);
+        $alerts[] = 'Record with id ' . $_GET['delete'] . ' is deleted.';
+    }
+}
+
+// Do we need to un/de-publish a record?
+if (isset($_GET['status']) && (int)($_GET['status']) > 0 && isset($_GET['value']) && (int)($_GET['status']) > 0) {
+    $record = $CrudManager->getById($_GET['status']);
+    if ($record) {
+        $CrudManager->setField($record->id, 'status', $_GET['value']);
+        die();
+    }
+}
+
+
+
+
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -31,6 +55,16 @@ $CrudManager = new CrudManager($entity);
             <h1><?= ucfirst($entity); ?></h1>
         </header>
 
+        <?php if (count($alerts) > 0) : ?>
+            <div class="alert alert-primary" role="alert">
+                <?php foreach ($alerts as $alert) : ?>
+                    <?= $alert; ?>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+        <a href="../admin/<?= $entity; ?>/new"><button title="Add" type="button" class="btn btn-primary">Add new</button></a>
+
         <?php print $CrudManager->getAdminTable(); ?>
 
     </div>
@@ -45,11 +79,33 @@ $CrudManager = new CrudManager($entity);
             // and retrieve the value from the attribute
             const button = event.relatedTarget;
             const id = button.getAttribute('data-bs-id');
+            const table = button.getAttribute('data-bs-table');
 
             // Set the value for the heading
-            const title = myModal.querySelector('.modal-title').textContent = "delete content with id " + id;
+            myModal.querySelector('.modal-title').textContent = "Delete ID " + id;
+            myModal.querySelector('.modal-body').textContent = "Are you sure you want to delete item with ID " + id + "?";
+            myModal.querySelector('.modal-confirm').setAttribute("href", "../admin/" + table + "?delete=" + id);
+
         });
     </script>
+
+
+    <script>
+        const statusswitches = document.querySelectorAll('.switchStatus');
+
+        statusswitches.forEach((el) =>
+            el.addEventListener('click', function(event) {
+                const id = el.getAttribute('data-bs-id');
+                const value = el.checked;
+
+                var xhttp = new XMLHttpRequest();
+                xhttp.open("GET", "?status=" + id + '&value=' + Number(value), true);
+                xhttp.send();
+            })
+        );
+    </script>
+
+
 </body>
 
 </html>

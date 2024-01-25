@@ -51,7 +51,7 @@ class CrudManager
     return $this->table;
   }
 
-  protected function getDBDescription(): array
+  public function getDBDescription(): array
   {
     $sql = "DESCRIBE " . $this->getTable();
     $stmt = $this->getDB()->prepare($sql);
@@ -69,6 +69,25 @@ class CrudManager
     ]);
 
     return $stmt->fetch(PDO::FETCH_OBJ);
+  }
+
+  public function deleteById(int $id): void
+  {
+    $sql = "DELETE FROM " . $this->getTable() . " WHERE id = :id";
+    $stmt = $this->getDB()->prepare($sql);
+    $stmt->execute([
+      'id' => $id
+    ]);
+  }
+
+  public function setField(int $id, string $column, int $value): void
+  {
+    $sql = "UPDATE " . $this->getTable() . " SET " . $column . " = :value WHERE id = :id";
+    $stmt = $this->getDB()->prepare($sql);
+    $stmt->execute([
+      'id' => $id,
+      'value' => $value
+    ]);
   }
 
   public function getAdminTable()
@@ -101,17 +120,25 @@ class CrudManager
       $str .= '<tr>';
 
       foreach (get_object_vars($record) as $key => $value) {
-        $str .= '<td>' . $value . '</td>';
+        if ($key == "status") {
+          $str .= '<td>
+          <div class="form-check form-switch">
+            <input class="form-check-input switchStatus" type="checkbox" id="switchStatus-' . $record->id . '"' . ($value == 1 ? ' checked' : '') . '  data-bs-id="' . $record->id . '">
+          </div>
+          </td>';
+        } else {
+          $str .= '<td>' . $value . '</td>';
+        }
       }
 
       $str .= '<td>
-                <a href="/admin/' . $this->table . '/view/' . $record->id . '"><button title="View" type="button" class="btn btn-outline-secondary"><i class="bi bi-eyeglasses"></i></button></a>
+                <a href="../admin/' . $this->table . '/view/' . $record->id . '"><button title="View" type="button" class="btn btn-outline-secondary"><i class="bi bi-eyeglasses"></i></button></a>
                 <a href="#"><button title="Edit" type="button" class="btn btn-outline-primary"><i class="bi bi-pencil"></i></button></a>
-                <a href="#">
-                  <button title="Delete" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-id="' . $record->id . '"  data-bs-title="">
-                    <i class="bi bi-trash"></i>
-                  </button>
-                </a>
+                
+                <button title="Delete" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-id="' . $record->id . '"  data-bs-table="' . $this->table . '"  data-bs-title="">
+                  <i class="bi bi-trash"></i>
+                </button>
+                
             </td>';
 
       $str .= '</tr>';
@@ -132,8 +159,10 @@ class CrudManager
                 ...
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Understood</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a class="modal-confirm" href="#">
+                  <button type="button" class="btn btn-danger">Confirm</button>
+                </a>
             </div>
         </div>
     </div>
