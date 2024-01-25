@@ -107,13 +107,38 @@ class CrudManager
       $str .= '<td>
                 <a href="/admin/' . $this->table . '/view/' . $record->id . '"><button title="View" type="button" class="btn btn-outline-secondary"><i class="bi bi-eyeglasses"></i></button></a>
                 <a href="#"><button title="Edit" type="button" class="btn btn-outline-primary"><i class="bi bi-pencil"></i></button></a>
-                <a href="#"><button title="Delete" type="button" class="btn btn-outline-danger"><i class="bi bi-trash"></i></button></a>
+                <a href="#">
+                  <button title="Delete" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-id="' . $record->id . '"  data-bs-title="">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </a>
             </td>';
 
       $str .= '</tr>';
     }
 
     $str .= '</tbody></table>';
+
+    $str .= '
+    <!-- Modal -->
+<div class="modal fade" id="deleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Understood</button>
+            </div>
+        </div>
+    </div>
+</div>
+    ';
 
     return $str;
   }
