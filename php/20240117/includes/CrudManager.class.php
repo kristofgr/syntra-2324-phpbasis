@@ -6,20 +6,20 @@ class CrudManager
   private $db;
 
 
-  public function __construct($table)
+  public function __construct($t)
   {
-    $this->table = $table;
+    $this->table = $t;
     $this->db = $this->connectToDB();
   }
 
 
   private function connectToDB()
   {
-    $DB_HOST = "127.0.0.1";
-    $DB_USER = "root";
-    $DB_PASSWORD = "root";
-    $DB_DB = "php_mysql";
-    $DB_PORT = "8889";
+    $DB_HOST = "db";
+    $DB_USER = "username";
+    $DB_PASSWORD = "password";
+    $DB_DB = "syntrafs";
+    $DB_PORT = "3306";
 
     try {
       $db = new PDO('mysql:host=' . $DB_HOST . '; port=' . $DB_PORT . '; dbname=' . $DB_DB, $DB_USER, $DB_PASSWORD);
@@ -57,7 +57,19 @@ class CrudManager
     $stmt = $this->getDB()->prepare($sql);
     $stmt->execute();
 
-    return $stmt->fetchAll(PDO::FETCH_OBJ);
+    $columns = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    foreach ($columns as $column) {
+      $type_parts = explode("(", $column->Type);
+      $column->Type = $type_parts[0];
+      $column->Length = null;
+
+      if (isset($type_parts[1])) {
+        $column->Length = (int)$type_parts[1];
+      }
+    }
+
+    return $columns;
   }
 
   public function getById(int $id): object|false
@@ -89,6 +101,66 @@ class CrudManager
       'value' => $value
     ]);
   }
+
+  public function insertRecord(array $tokens): int
+  {
+    $cols = implode(',', array_keys($tokens));
+    $vals = ":" . implode(',:', array_keys($tokens));
+
+    $sql = "INSERT INTO " . $this->getTable() . "(" . $cols . ") VALUES (" . $vals . ")";
+    $db = $this->getDB();
+    $stmt = $db->prepare($sql);
+    $stmt->execute($tokens);
+
+    return $db->lastInsertId();
+  }
+
+  public function getAddForm()
+  {
+    $columns = $this->getDBDescription();
+    $str = '<form method="post">';
+
+    foreach ($columns as $column) {
+
+      $type_parts = explode('(', $column->Type);
+
+      switch ($type_parts[0]) {
+
+        case 'int unsigned':
+          if ($column->Key == 'PRI') {
+            break;
+          }
+          break;
+
+        case 'varchar':
+          $str .= '<div><input type="text" name="' . $column->Field . '" id="' . $column->Field . '" placeholder="' . $column->Field . '" /></div>';
+          break;
+
+        case 'smallint':
+          $str .= '<div><input min="-32768" max="32767" type="number" name="' . $column->Field . '" id="' . $column->Field . '" placeholder="' . $column->Field . '" /></div>';
+          break;
+
+        case 'int':
+          $str .= '<div><input min="-2147483648" max="2147483647" type="number" name="' . $column->Field . '" id="' . $column->Field . '" placeholder="' . $column->Field . '" /></div>';
+          break;
+
+        case 'tinyint':
+          $str .= '<div><input min="-128" max="127" type="number" name="' . $column->Field . '" id="' . $column->Field . '" placeholder="' . $column->Field . '" /></div>';
+          break;
+      }
+    }
+
+    $str .= '<input type="submit" value="save" name="submit" id="submit" /></form>';
+
+    // print '<pre>';
+    // print_r($columns);
+    // exit;
+
+
+    return $str;
+  }
+
+
 
   public function getAdminTable()
   {
