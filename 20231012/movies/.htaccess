@@ -1,6 +1,0 @@
-Options +FollowSymLinks -MultiViews
-
-RewriteEngine On
-
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^movie/(.*)$ detail.php?slug=$1 [L,QSA,NC]

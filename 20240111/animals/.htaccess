@@ -1,8 +1,0 @@
-#  DirectoryIndex pdo.php 
-Options +FollowSymLinks -MultiViews
-
-RewriteEngine On
-
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^edit/(.*)$ edit.php?id=$1 [L,QSA,NC]
-RewriteRule ^api/(continents|animals)$ api.php?src=$1 [L,QSA,NC]

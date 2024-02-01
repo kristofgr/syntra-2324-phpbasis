@@ -1,9 +1,0 @@
-#  DirectoryIndex pdo.php 
-Options +FollowSymLinks -MultiViews
-
-RewriteEngine On
-
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^admin/(.*)/view/(.*)$ admin_detail.php?entity=$1&id=$2 [L,QSA,NC]
-RewriteRule ^admin/(.*)/new$ admin_add.php?entity=$1 [L,QSA,NC]
-RewriteRule ^admin/(.*)$ admin.php?entity=$1 [L,QSA,NC]
